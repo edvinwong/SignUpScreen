@@ -10,7 +10,26 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    return const MaterialApp(home: MyStatefulWidget());
+  }
+}
+
+class MyStatefulWidget extends StatefulWidget {
+  const MyStatefulWidget({Key? key}) : super(key: key);
+
+  @override
+  State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
+}
+
+class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+  String? dropdownValue = null;
+
+  @override
+  Widget build(BuildContext context) {
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+    String Name = '';
+    String Email = '';
+    String Password = '';
 
     return MaterialApp(
       home: Scaffold(
@@ -29,59 +48,77 @@ class MyApp extends StatelessWidget {
                 decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
                     labelText: 'Enter your Username'),
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your name';
+                  }
+                  return null;
+                },
+                onChanged: (String? value) {
+                  setState(() {
+                    Name = value!;
+                  });
+                },
               ),
               TextFormField(
                 decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
                     labelText: 'Enter your Email'),
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your Email';
+                  }
+                  return null;
+                },
+                onChanged: (String? value) {
+                  setState(() {
+                    Email = value!;
+                  });
+                },
               ),
               TextFormField(
                 decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
                     labelText: 'Enter your Password'),
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your password';
+                  }
+                  return null;
+                },
+                onChanged: (String? value) {
+                  setState(() {
+                    Password = value!;
+                  });
+                },
+              ),
+              DropdownButton<String>(
+                value: dropdownValue,
+                icon: const Icon(Icons.arrow_downward),
+                iconSize: 24,
+                elevation: 16,
+                style: const TextStyle(color: Colors.deepPurple),
+                underline: Container(
+                  height: 2,
+                  color: Colors.deepPurpleAccent,
+                ),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    dropdownValue = newValue!;
+                  });
+                },
+                items: <String>['Male', 'Female', 'Other', 'Rather not to say']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
               ),
               MyStatefulWidget(),
               SnackBarPage()
             ])),
       ),
-    );
-  }
-}
-
-class MyStatefulWidget extends StatefulWidget {
-  const MyStatefulWidget({Key? key}) : super(key: key);
-
-  @override
-  State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
-}
-
-class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-  String? dropdownValue = null;
-
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButton<String>(
-      value: dropdownValue,
-      icon: const Icon(Icons.arrow_downward),
-      iconSize: 24,
-      elevation: 16,
-      style: const TextStyle(color: Colors.deepPurple),
-      underline: Container(
-        height: 2,
-        color: Colors.deepPurpleAccent,
-      ),
-      onChanged: (String? newValue) {
-        setState(() {
-          dropdownValue = newValue!;
-        });
-      },
-      items: <String>['Male', 'Female', 'Other', 'Rather not to say']
-          .map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
     );
   }
 }
